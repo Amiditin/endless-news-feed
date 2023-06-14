@@ -12,6 +12,10 @@ export const getMessagesLastItemId = createSelector(getMessages, (messages) => {
   return messages.lastItemId;
 });
 
+export const getFavoriteItemsId = createSelector(getMessages, (messages) => {
+  return messages.favoriteItemsId;
+});
+
 export const getMessagesStatus = createSelector(getMessages, (messages) => {
   return messages.status;
 });

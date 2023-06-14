@@ -1,13 +1,16 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { PayloadAction, createSlice } from '@reduxjs/toolkit';
 
 import { messagesThunks } from './thunk';
 
 import type { IMessagesState } from './types';
 import type { IMessageModel } from '@/shared/api/models';
 
+const favoriteMessagesName = 'favoriteMessages';
+
 const initialState: IMessagesState = {
   items: [],
   lastItemId: '1',
+  favoriteItemsId: JSON.parse(localStorage.getItem(favoriteMessagesName) || '[]'),
   status: 'init',
 };
 
@@ -24,7 +27,19 @@ const findLastMessageId = (items: IMessageModel[], lastItemId: string) => {
 const messagesSlice = createSlice({
   name: 'messages',
   initialState,
-  reducers: {},
+  reducers: {
+    addFavorite: (state, { payload }: PayloadAction<string>) => {
+      state.favoriteItemsId.push(payload);
+
+      localStorage.setItem(favoriteMessagesName, JSON.stringify(state.favoriteItemsId));
+    },
+
+    removeFavorite: (state, { payload }: PayloadAction<string>) => {
+      state.favoriteItemsId = state.favoriteItemsId.filter((id) => id !== payload);
+
+      localStorage.setItem(favoriteMessagesName, JSON.stringify(state.favoriteItemsId));
+    },
+  },
   extraReducers: (builder) => {
     builder.addCase(messagesThunks.findAll.pending, (state) => {
       state.status = 'loading';

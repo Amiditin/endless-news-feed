@@ -3,6 +3,7 @@ import type { TRequestStatuses } from '@/redux/types';
 
 export interface IMessagesState {
   items: IMessageModel[];
+  favoriteItemsId: string[];
   lastItemId: string;
   status: TRequestStatuses;
 }
