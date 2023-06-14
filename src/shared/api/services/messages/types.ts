@@ -10,7 +10,7 @@ export interface IMessageModel extends IModelId {
   content: string;
   channel: string;
   date: string;
-  attachments: IAttachmentModel;
+  attachments: IAttachmentModel[];
   senderNumber: string;
   region: string;
 }
