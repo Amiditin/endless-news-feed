@@ -1,8 +1,127 @@
 @import '/src/shared/scss/_variables.scss';
 
+@keyframes ani {
+  0% {
+    opacity: 0;
+  }
+
+  100% {
+    opacity: 1;
+  }
+}
+
 .home {
   width: 100%;
-  max-width: 1240px;
+  max-width: 900px;
   margin: 0 auto;
-  padding: 0 10px;
+  padding: 20px 25px;
+
+  .icon_sort {
+    font-size: 24px;
+    margin-left: 6px;
+    opacity: 0.5;
+    cursor: pointer;
+    transition: all $duration;
+    transform: rotateX(0deg);
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .icon_sort_rotate {
+    transform: rotateX(180deg)
+  }
+
+  .message {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    opacity: 0;
+    animation: ani 1.5s forwards;
+  }
+
+  .message_top {
+    position: relative;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 10px;
+    padding-right: 120px;
+  }
+
+
+  .author {
+    display: flex;
+    gap: 10px;
+
+    .avatar {
+      margin-top: 3px;
+      background-color: $color-primary;
+      vertical-align: middle;
+    }
+
+    .title {
+      display: flex;
+      flex-direction: column;
+    }
+  }
+
+  .buttons {
+    display: flex;
+    gap: 10px;
+  }
+
+  .icons {
+    position: absolute;
+    right: 0;
+    display: flex;
+    gap: 10px;
+
+    .icon {
+      font-size: 18px;
+      color: $color-secondary;
+      align-items: flex-start;
+      cursor: no-drop;
+    }
+
+    .icon_star {
+      cursor: pointer;
+      color: $color-primary;
+    }
+  }
+
+  .content {
+    display: flex;
+    gap: 10px;
+    margin-top: 5px;
+
+    .text {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .time {
+      width: 100%;
+      max-width: 40px;
+      color: $color-secondary;
+    }
+  }
+
+  .attachments {
+    margin-top: 10px;
+    margin-left: 50px;
+
+    .image {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .video {
+      width: 100%;
+      max-width: 400px;
+    }
+  }
+
 }
