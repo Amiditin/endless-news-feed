@@ -22,5 +22,5 @@ export interface IFindMessages {
 export interface IMessagesService {
   findAll: TAxiosRequest<void, IFindMessages>;
 
-  findNextById: TAxiosRequest<IModelId, IFindMessages>;
+  findNextById: TAxiosRequest<IModelId, IFindMessages | 'no message'>;
 }

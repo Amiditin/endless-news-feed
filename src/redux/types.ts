@@ -6,6 +6,8 @@ export type TRootState = ReturnType<typeof store.getState>;
 
 export type TAppDispatch = typeof store.dispatch;
 
+export type TCondition = (_: unknown, api: { getState: () => TRootState }) => boolean | undefined;
+
 export type TThunkConfig = { rejectValue: AxiosError; state: TRootState };
 
 export type TRequestStatuses = 'init' | 'loading' | 'error' | 'success';
