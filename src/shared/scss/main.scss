@@ -13,7 +13,7 @@ body {
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
+  font-family: 'Lato', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial,
     'Noto Sans', sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol',
     'Noto Color Emoji';
   font-weight: 400;
@@ -21,10 +21,3 @@ body {
   line-height: 27px;
   color: $color-main;
 }
-
-// @font-face {
-//   font-family: 'Example';
-//   src: url('/src/shared/assets/fonts/Example-VariableFont.ttf') format('truetype');
-//   font-weight: 100 1000;
-//   font-stretch: 25% 151%;
-// }
