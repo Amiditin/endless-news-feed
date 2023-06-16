@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useState } from 'react';
-import { List, Typography, Avatar, Button } from 'antd';
+import { List, Typography, Avatar, Button, Tooltip } from 'antd';
 import {
   LayoutOutlined,
   SettingOutlined,
@@ -50,10 +50,12 @@ export const HomePage: React.FC = () => {
     <main className={styles.home}>
       <Title level={2}>
         Последние сообщения
-        <VerticalAlignBottomOutlined
-          className={clsx(styles.icon_sort, !isSortAcs && styles.icon_sort_rotate)}
-          onClick={() => setIsSortAcs((prev) => !prev)}
-        />
+        <Tooltip title={isSortAcs ? 'Сначала старые' : 'Сначала новые'}>
+          <VerticalAlignBottomOutlined
+            className={clsx(styles.icon_sort, !isSortAcs && styles.icon_sort_rotate)}
+            onClick={() => setIsSortAcs((prev) => !prev)}
+          />
+        </Tooltip>
       </Title>
       <List
         itemLayout="horizontal"
@@ -78,15 +80,19 @@ export const HomePage: React.FC = () => {
                 <LayoutOutlined className={styles.icon} />
                 <SettingOutlined className={styles.icon} />
                 {favoritesMessagesId.includes(item.id) ? (
-                  <StarFilled
-                    className={clsx(styles.icon, styles.icon_star)}
-                    onClick={() => actions.removeFavorite(item.id)}
-                  />
+                  <Tooltip title="Удалить из избранного">
+                    <StarFilled
+                      className={clsx(styles.icon, styles.icon_star)}
+                      onClick={() => actions.removeFavorite(item.id)}
+                    />
+                  </Tooltip>
                 ) : (
-                  <StarOutlined
-                    className={clsx(styles.icon, styles.icon_star)}
-                    onClick={() => actions.addFavorite(item.id)}
-                  />
+                  <Tooltip title="Добавить в избранное">
+                    <StarOutlined
+                      className={clsx(styles.icon, styles.icon_star)}
+                      onClick={() => actions.addFavorite(item.id)}
+                    />
+                  </Tooltip>
                 )}
               </div>
             </div>

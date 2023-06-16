@@ -87,8 +87,14 @@
     }
 
     .icon_star {
-      cursor: pointer;
+      opacity: 0.75;
       color: $color-primary;
+      cursor: pointer;
+      transition: opacity $duration;
+
+      &:hover {
+        opacity: 1;
+      }
     }
   }
 
