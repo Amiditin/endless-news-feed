@@ -10,6 +10,7 @@ const favoriteMessagesName = 'favoriteMessages';
 const initialState: IMessagesState = {
   items: [],
   lastItemId: '1',
+  largestOldItemId: '1',
   favoriteItemsId: JSON.parse(localStorage.getItem(favoriteMessagesName) || '[]'),
   status: 'init',
 };
@@ -28,16 +29,22 @@ const messagesSlice = createSlice({
   name: 'messages',
   initialState,
   reducers: {
-    addFavorite: (state, { payload }: PayloadAction<string>) => {
-      state.favoriteItemsId.push(payload);
+    addFavorite: (state, { payload: itemId }: PayloadAction<string>) => {
+      state.favoriteItemsId.push(itemId);
 
-      localStorage.setItem(favoriteMessagesName, JSON.stringify(state.favoriteItemsId));
+      if (+itemId <= +state.largestOldItemId) {
+        localStorage.setItem(favoriteMessagesName, JSON.stringify(state.favoriteItemsId));
+      }
     },
 
-    removeFavorite: (state, { payload }: PayloadAction<string>) => {
-      state.favoriteItemsId = state.favoriteItemsId.filter((id) => id !== payload);
+    removeFavorite: (state, { payload: itemId }: PayloadAction<string>) => {
+      state.favoriteItemsId = state.favoriteItemsId.filter((id) => id !== itemId);
 
-      localStorage.setItem(favoriteMessagesName, JSON.stringify(state.favoriteItemsId));
+      const favoriteItemsIdWithoutNewItems = state.favoriteItemsId.filter(
+        (id) => id !== itemId && +id <= +state.largestOldItemId,
+      );
+
+      localStorage.setItem(favoriteMessagesName, JSON.stringify(favoriteItemsIdWithoutNewItems));
     },
   },
   extraReducers: (builder) => {
@@ -45,9 +52,12 @@ const messagesSlice = createSlice({
       state.status = 'loading';
     });
     builder.addCase(messagesThunks.findAll.fulfilled, (state, action) => {
+      const lastMessageId = findLastMessageId(action.payload, state.lastItemId);
+
       state.items = action.payload;
-      state.lastItemId = findLastMessageId(action.payload, state.lastItemId);
       state.status = 'success';
+      state.lastItemId = lastMessageId;
+      state.largestOldItemId = lastMessageId;
     });
     builder.addCase(messagesThunks.findAll.rejected, (state) => {
       state.status = 'error';

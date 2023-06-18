@@ -5,5 +5,6 @@ export interface IMessagesState {
   items: IMessageModel[];
   favoriteItemsId: string[];
   lastItemId: string;
+  largestOldItemId: string;
   status: TRequestStatuses;
 }
