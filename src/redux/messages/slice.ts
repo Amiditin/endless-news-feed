@@ -74,6 +74,17 @@ const messagesSlice = createSlice({
     builder.addCase(messagesThunks.findNextById.rejected, (state) => {
       state.status = 'error';
     });
+
+    builder.addCase(messagesThunks.findPrevById.pending, (state) => {
+      state.status = 'loading';
+    });
+    builder.addCase(messagesThunks.findPrevById.fulfilled, (state, action) => {
+      state.items.unshift(...action.payload);
+      state.status = 'success';
+    });
+    builder.addCase(messagesThunks.findPrevById.rejected, (state) => {
+      state.status = 'error';
+    });
   },
 });
 

@@ -17,10 +17,14 @@ export interface IMessageModel extends IModelId {
 
 export interface IFindMessages {
   Messages: IMessageModel[];
+  likeImages: [];
+  dislikeImages: [];
 }
 
 export interface IMessagesService {
   findAll: TAxiosRequest<void, IFindMessages>;
 
   findNextById: TAxiosRequest<IModelId, IFindMessages | 'no message'>;
+
+  findPrevById: TAxiosRequest<IModelId, IFindMessages | 'no message'>;
 }

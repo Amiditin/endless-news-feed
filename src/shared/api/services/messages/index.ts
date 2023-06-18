@@ -12,4 +12,11 @@ export const messagesService: IMessagesService = {
   findNextById: async ({ id }, config) => {
     return axios.post(messagesRoute, { actionName: 'MessagesLoad', messageId: id }, config);
   },
+  findPrevById: async ({ id }, config) => {
+    return axios.post(
+      messagesRoute,
+      { actionName: 'MessagesLoad', messageId: id, oldMessages: true },
+      config,
+    );
+  },
 };
