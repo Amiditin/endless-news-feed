@@ -87,14 +87,30 @@
     }
 
     .icon_star {
+      font-size: 18px;
+      align-items: flex-start;
       opacity: 0.75;
       color: $color-primary;
       cursor: pointer;
-      transition: opacity $duration;
+      transition: all $duration;
+
+      svg path:first-child {
+        transform: scale(1.1) translateX(-42px) translateY(-42px) !important;
+      }
 
       &:hover {
         opacity: 1;
       }
+    }
+
+    @keyframes change-bg {
+      to {
+        fill: $color-primary;
+      }
+    }
+
+    .icon_star_active path {
+      animation: change-bg 1s ease forwards;
     }
   }
 

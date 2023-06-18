@@ -3,23 +3,17 @@ import { List, Typography, Avatar, Button, Tooltip } from 'antd';
 import {
   LayoutOutlined,
   SettingOutlined,
-  StarFilled,
-  StarOutlined,
   UserOutlined,
   VerticalAlignBottomOutlined,
   VerticalAlignTopOutlined,
 } from '@ant-design/icons';
 import clsx from 'clsx';
 
-import { useAppDispatch, useAppSelector, useActionCreators } from '@/shared/hooks';
+import { getMessagesItems, getMessagesLastItemId, messagesThunks } from '@/redux/messages';
+import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { parseDate } from '@/shared/helpers';
-import {
-  getFavoriteItemsId,
-  getMessagesItems,
-  getMessagesLastItemId,
-  messagesActions,
-  messagesThunks,
-} from '@/redux/messages';
+
+import { FavoriteMessageStatus } from './FavoriteMessageStatus';
 
 import styles from './Home.module.scss';
 
@@ -28,11 +22,9 @@ const { Title, Text } = Typography;
 export const HomePage: React.FC = () => {
   const [isSortAcs, setIsSortAcs] = useState(true);
   const dispatch = useAppDispatch();
-  const actions = useActionCreators(messagesActions);
 
   const messages = useAppSelector(getMessagesItems);
   const lastMessageId = useAppSelector(getMessagesLastItemId);
-  const favoritesMessagesId = useAppSelector(getFavoriteItemsId);
 
   useLayoutEffect(() => {
     dispatch(messagesThunks.findAll());
@@ -79,21 +71,7 @@ export const HomePage: React.FC = () => {
                 <VerticalAlignTopOutlined className={styles.icon} rotate={90} />
                 <LayoutOutlined className={styles.icon} />
                 <SettingOutlined className={styles.icon} />
-                {favoritesMessagesId.includes(item.id) ? (
-                  <Tooltip title="Удалить из избранного">
-                    <StarFilled
-                      className={clsx(styles.icon, styles.icon_star)}
-                      onClick={() => actions.removeFavorite(item.id)}
-                    />
-                  </Tooltip>
-                ) : (
-                  <Tooltip title="Добавить в избранное">
-                    <StarOutlined
-                      className={clsx(styles.icon, styles.icon_star)}
-                      onClick={() => actions.addFavorite(item.id)}
-                    />
-                  </Tooltip>
-                )}
+                <FavoriteMessageStatus messageId={item.id} />
               </div>
             </div>
             <div className={styles.content}>
