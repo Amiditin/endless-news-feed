@@ -33,117 +33,17 @@
     transform: rotateX(180deg)
   }
 
-  .message {
+  .scrollable_box {
+    max-height: calc(100vh - 120px);
+    overflow: auto;
+    margin-top: 22px;
+    padding: 0 16px;
+    border: 1px solid rgba(140, 140, 140, 0.35);
+    border-radius: 2px;
+  }
+
+  .flex_dir_reverse {
     display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    opacity: 0;
-    animation: ani 1.5s forwards;
+    flex-direction: column-reverse !important;
   }
-
-  .message_top {
-    position: relative;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding-right: 120px;
-  }
-
-
-  .author {
-    display: flex;
-    gap: 10px;
-
-    .avatar {
-      margin-top: 3px;
-      background-color: $color-primary;
-      vertical-align: middle;
-    }
-
-    .title {
-      display: flex;
-      flex-direction: column;
-    }
-  }
-
-  .buttons {
-    display: flex;
-    gap: 10px;
-  }
-
-  .icons {
-    position: absolute;
-    right: 0;
-    display: flex;
-    gap: 10px;
-
-    .icon {
-      font-size: 18px;
-      color: $color-secondary;
-      align-items: flex-start;
-      cursor: no-drop;
-    }
-
-    .icon_star {
-      font-size: 18px;
-      align-items: flex-start;
-      opacity: 0.75;
-      color: $color-primary;
-      cursor: pointer;
-      transition: all $duration;
-
-      svg path:first-child {
-        transform: scale(1.1) translateX(-42px) translateY(-42px) !important;
-      }
-
-      &:hover {
-        opacity: 1;
-      }
-    }
-
-    @keyframes change-bg {
-      to {
-        fill: $color-primary;
-      }
-    }
-
-    .icon_star_active path {
-      animation: change-bg 1s ease forwards;
-    }
-  }
-
-  .content {
-    display: flex;
-    gap: 10px;
-    margin-top: 5px;
-
-    .text {
-      display: flex;
-      flex-direction: column;
-    }
-
-    .time {
-      width: 100%;
-      max-width: 40px;
-      color: $color-secondary;
-    }
-  }
-
-  .attachments {
-    margin-top: 10px;
-    margin-left: 50px;
-
-    .image {
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .video {
-      width: 100%;
-      max-width: 400px;
-    }
-  }
-
 }

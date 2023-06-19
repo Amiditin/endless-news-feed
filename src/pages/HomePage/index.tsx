@@ -1,102 +1,64 @@
-import { useEffect, useLayoutEffect, useState } from 'react';
-import { List, Typography, Avatar, Button, Tooltip } from 'antd';
-import {
-  LayoutOutlined,
-  SettingOutlined,
-  UserOutlined,
-  VerticalAlignBottomOutlined,
-  VerticalAlignTopOutlined,
-} from '@ant-design/icons';
+import { useRef, useState } from 'react';
+import { Typography, Tooltip } from 'antd';
+import { VerticalAlignBottomOutlined } from '@ant-design/icons';
+import InfiniteScroll from 'react-infinite-scroll-component';
 import clsx from 'clsx';
 
 import { getMessagesItems, getMessagesLastItemId, messagesThunks } from '@/redux/messages';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
-import { parseDate } from '@/shared/helpers';
 
-import { FavoriteMessageStatus } from './FavoriteMessageStatus';
+import { ListMessages } from './ListMessages';
 
 import styles from './Home.module.scss';
 
-const { Title, Text } = Typography;
+const { Title } = Typography;
 
 export const HomePage: React.FC = () => {
-  const [isSortAcs, setIsSortAcs] = useState(true);
+  const [isFirstOld, setIsFirstOld] = useState(false);
   const dispatch = useAppDispatch();
 
   const messages = useAppSelector(getMessagesItems);
   const lastMessageId = useAppSelector(getMessagesLastItemId);
 
-  useLayoutEffect(() => {
-    dispatch(messagesThunks.findAll());
-  }, [dispatch]);
+  const shouldLoadPrev = useRef(true);
 
-  useEffect(() => {
-    const interval = setInterval(() => {
-      dispatch(messagesThunks.findNextById({ id: lastMessageId }));
-    }, 5000);
+  const handleLoadPrev = () => {
+    if (shouldLoadPrev.current) {
+      dispatch(messagesThunks.findPrevById({ id: lastMessageId }));
+    }
 
-    return () => clearInterval(interval);
-  }, [dispatch, lastMessageId]);
+    shouldLoadPrev.current = false;
+
+    setTimeout(() => {
+      shouldLoadPrev.current = true;
+    }, 1000);
+  };
 
   return (
     <main className={styles.home}>
       <Title level={2}>
         Последние сообщения
-        <Tooltip title={isSortAcs ? 'Сначала старые' : 'Сначала новые'}>
+        <Tooltip title={isFirstOld ? 'Режим: сначала старые' : 'Режим: сначала новые'}>
           <VerticalAlignBottomOutlined
-            className={clsx(styles.icon_sort, !isSortAcs && styles.icon_sort_rotate)}
-            onClick={() => setIsSortAcs((prev) => !prev)}
+            className={clsx(styles.icon_sort, !isFirstOld && styles.icon_sort_rotate)}
+            onClick={() => setIsFirstOld((prev) => !prev)}
           />
         </Tooltip>
       </Title>
-      <List
-        itemLayout="horizontal"
-        dataSource={isSortAcs ? messages : messages.slice().reverse()}
-        renderItem={(item) => (
-          <List.Item className={styles.message}>
-            <div className={styles.message_top}>
-              <div className={styles.author}>
-                <Avatar className={styles.avatar} size={40} icon={<UserOutlined />} />
-                <div className={styles.title}>
-                  <Text strong>{item.author}</Text>
-                  <Text italic>{item.channel}</Text>
-                </div>
-              </div>
-              <div className={styles.buttons}>
-                <Button disabled>Левый</Button>
-                <Button disabled>Центр</Button>
-                <Button disabled>Правый</Button>
-              </div>
-              <div className={styles.icons}>
-                <VerticalAlignTopOutlined className={styles.icon} rotate={90} />
-                <LayoutOutlined className={styles.icon} />
-                <SettingOutlined className={styles.icon} />
-                <FavoriteMessageStatus messageId={item.id} />
-              </div>
-            </div>
-            <div className={styles.content}>
-              <span className={styles.time}>{parseDate(item.date)}</span>
-              <p className={styles.text}>
-                <Text>{item.content}</Text>
-                <Text type="secondary">Далее</Text>
-              </p>
-            </div>
-            <div className={styles.attachments}>
-              {item.attachments.map((attachment) =>
-                attachment.type === 'image' ? (
-                  <img className={styles.image} src={attachment.url} key={item.id} alt="Content" />
-                ) : (
-                  <video className={styles.video} key={item.id} controls>
-                    <track kind="captions" />
-                    <source src={attachment.url} />
-                    <a href={attachment.url}>Скачайте видео</a>. //{' '}
-                  </video>
-                ),
-              )}
-            </div>
-          </List.Item>
-        )}
-      />
+      <div
+        id="scrollableBox"
+        className={clsx(styles.scrollable_box, isFirstOld && styles.flex_dir_reverse)}>
+        <InfiniteScroll
+          dataLength={messages.length}
+          scrollableTarget="scrollableBox"
+          next={handleLoadPrev}
+          scrollThreshold="500px"
+          inverse={isFirstOld}
+          loader={null}
+          hasMore>
+          <ListMessages isFirstOld={isFirstOld} />
+        </InfiniteScroll>
+      </div>
     </main>
   );
 };

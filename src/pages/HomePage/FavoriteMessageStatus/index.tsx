@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import { useAppDispatch, useAppSelector } from '@/shared/hooks';
 import { getFavoriteItemsId, messagesActions } from '@/redux/messages';
 
-import styles from './Home.module.scss';
+import styles from './FavoriteMessageStatus.module.scss';
 
 interface IFavoriteMessageStatusProps {
   messageId: string;

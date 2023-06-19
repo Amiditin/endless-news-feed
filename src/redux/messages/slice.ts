@@ -54,7 +54,7 @@ const messagesSlice = createSlice({
     builder.addCase(messagesThunks.findAll.fulfilled, (state, action) => {
       const lastMessageId = findLastMessageId(action.payload, state.lastItemId);
 
-      state.items = action.payload;
+      state.items = action.payload.slice().reverse();
       state.status = 'success';
       state.lastItemId = lastMessageId;
       state.largestOldItemId = lastMessageId;
@@ -67,7 +67,7 @@ const messagesSlice = createSlice({
       state.status = 'loading';
     });
     builder.addCase(messagesThunks.findNextById.fulfilled, (state, action) => {
-      state.items.push(...action.payload);
+      state.items.unshift(...action.payload);
       state.lastItemId = findLastMessageId(action.payload, state.lastItemId);
       state.status = 'success';
     });
@@ -79,7 +79,7 @@ const messagesSlice = createSlice({
       state.status = 'loading';
     });
     builder.addCase(messagesThunks.findPrevById.fulfilled, (state, action) => {
-      state.items.unshift(...action.payload);
+      state.items.push(...action.payload);
       state.status = 'success';
     });
     builder.addCase(messagesThunks.findPrevById.rejected, (state) => {
