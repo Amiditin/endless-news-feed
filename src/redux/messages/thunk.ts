@@ -1,16 +1,14 @@
-import { createAsyncThunk } from '@reduxjs/toolkit';
 import { AxiosError } from 'axios';
 
-import { checkStatusCondition } from '@/redux/conditions';
+import { checkStatusCondition, createAppThunk } from '@/redux/utils';
 import { messagesService } from '@/shared/api/services';
 
 import { messagesName } from './slice';
 
 import type { IMessageModel } from '@/shared/api/models';
-import type { TThunkConfig } from '@/redux/types';
 
 export const messagesThunks = {
-  findAll: createAsyncThunk<IMessageModel[], undefined, TThunkConfig>(
+  findAll: createAppThunk<IMessageModel[]>(
     `${messagesName}/findAll`,
     async (_, { rejectWithValue }) => {
       try {
@@ -24,7 +22,7 @@ export const messagesThunks = {
     { condition: checkStatusCondition('messages') },
   ),
 
-  findNextById: createAsyncThunk<IMessageModel[], { id: string }, TThunkConfig>(
+  findNextById: createAppThunk<IMessageModel[], { id: string }>(
     `${messagesName}/findNextById`,
     async (params, { rejectWithValue }) => {
       try {
@@ -42,7 +40,7 @@ export const messagesThunks = {
     { condition: checkStatusCondition('messages') },
   ),
 
-  findPrevById: createAsyncThunk<IMessageModel[], { id: string }, TThunkConfig>(
+  findPrevById: createAppThunk<IMessageModel[], { id: string }>(
     `${messagesName}/findPrevById`,
     async (params, { rejectWithValue }) => {
       try {
