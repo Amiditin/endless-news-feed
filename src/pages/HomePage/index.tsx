@@ -1,4 +1,4 @@
-import { useRef, useState } from 'react';
+import { useId, useRef, useState } from 'react';
 import { Typography, Tooltip } from 'antd';
 import { VerticalAlignBottomOutlined } from '@ant-design/icons';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -15,6 +15,7 @@ const { Title } = Typography;
 
 export const HomePage: React.FC = () => {
   const [isFirstOld, setIsFirstOld] = useState(false);
+  const scrollableBoxId = useId();
   const dispatch = useAppDispatch();
 
   const messages = useAppSelector(getMessagesItems);
@@ -46,11 +47,11 @@ export const HomePage: React.FC = () => {
         </Tooltip>
       </Title>
       <div
-        id="scrollableBox"
+        id={scrollableBoxId}
         className={clsx(styles.scrollable_box, isFirstOld && styles.flex_dir_reverse)}>
         <InfiniteScroll
           dataLength={messages.length}
-          scrollableTarget="scrollableBox"
+          scrollableTarget={scrollableBoxId}
           next={handleLoadPrev}
           scrollThreshold="500px"
           inverse={isFirstOld}
